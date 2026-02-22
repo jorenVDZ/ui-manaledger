@@ -13,6 +13,13 @@ const envFile = `export const environment = {
 };
 `;
 
+// Ensure the environments directory exists
+const envDir = path.join(__dirname, 'src', 'environments');
+if (!fs.existsSync(envDir)) {
+  fs.mkdirSync(envDir, { recursive: true });
+  console.log(successColor, `${checkSign} Created environments directory`);
+}
+
 // Generate environment.ts (used by production builds)
 const prodPath = path.join(__dirname, 'src', 'environments', 'environment.ts');
 fs.writeFileSync(prodPath, envFile);
