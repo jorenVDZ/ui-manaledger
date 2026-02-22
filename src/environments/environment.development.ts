@@ -1,6 +1,0 @@
-export const environment = {
-  production: false,
-  SUPABASE_URL: '',
-  SUPABASE_SECRET_KEY: '',
-  SUPABASE_ANON_KEY: ''
-};
