@@ -1,0 +1,11 @@
+<div class="card-container transition-transform duration-300 ease-in-out hover:scale-110">
+  @if (card(); as cardData) {
+    <img
+      [src]="cardData.imageUris?.normal || cardData.imageUris?.large || cardData.imageUris?.small"
+      [alt]="cardData.name"
+      [pTooltip]="cardData.name"
+      tooltipPosition="top"
+      class="rounded-lg shadow-md hover:shadow-xl cursor-pointer"
+    />
+  }
+</div>

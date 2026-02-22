@@ -69,4 +69,13 @@ export class AuthService {
     const { data: { user } } = await this.supabase.auth.getUser();
     return user;
   }
+
+  async getAccessToken(): Promise<string | null> {
+    const { data: { session } } = await this.supabase.auth.getSession();
+    return session?.access_token ?? null;
+  }
+
+  getSupabaseClient(): SupabaseClient {
+    return this.supabase;
+  }
 }

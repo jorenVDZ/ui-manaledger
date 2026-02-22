@@ -5,6 +5,7 @@ import Lara from '@primeuix/themes/aura';
 import { providePrimeNG } from 'primeng/config';
 
 import { routes } from './app.routes';
+import { graphqlProvider } from './graphql.provider';
 
 const MyPreset = definePreset(Lara, {
     semantic: {
@@ -33,6 +34,7 @@ export const appConfig: ApplicationConfig = {
             preset: MyPreset,
 
         }
-    })
+    }),
+    ...graphqlProvider
   ]
 };

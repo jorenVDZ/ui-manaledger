@@ -1,0 +1,31 @@
+query searchCards($query: String!, $limit: Int, $offset: Int) {
+  searchCards(query: $query, limit: $limit, offset: $offset) {
+    cards {
+      id
+      name
+      imageUris {
+        small
+        normal
+      }
+      cmc
+      artist
+      isCommanderLegal
+      cardmarketPrice {
+        avg
+        low
+        avg1
+        avg7
+        avg30
+        trend
+        avgFoil
+        lowFoil
+        avg1Foil
+        avg7Foil
+        avg30Foil
+        trendFoil
+      }
+    }
+    total
+    hasMore
+  }
+}

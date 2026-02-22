@@ -1,11 +1,59 @@
 <div class="min-h-screen">
-  <div class="max-w-[115rem] mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <div class="max-w-[80%] mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-purple-500/10 p-8 md:p-12">
-      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-4 bg-gradient-to-r from-pink-500 to-purple-600 dark:from-pink-400 dark:to-purple-500 bg-clip-text text-transparent">Home</h1>
-      @if (authService.currentUser()) {
-        <p class="text-xl text-gray-700 dark:text-gray-300">Welcome to ManaLedger, <span class="font-semibold text-purple-600 dark:text-purple-400">{{ authService.currentUser()!.email }}</span>!</p>
-      } @else {
-        <p class="text-xl text-gray-500 dark:text-gray-400">Loading...</p>
+      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-4 bg-gradient-to-r from-pink-500 to-purple-600 dark:from-pink-400 dark:to-purple-500 bg-clip-text text-transparent">Card Search</h1>
+      <!-- Search Bar -->
+      <div class="mb-8">
+        <div class="flex gap-4">
+          <input
+            pInputText
+            type="text"
+            [(ngModel)]="searchQuery"
+            placeholder="Search for cards..."
+            class="flex-1 p-3 text-lg"
+          />
+          <p-button
+            label="Search"
+            icon="pi pi-search"
+            (onClick)="onSearch()"
+            [loading]="loading()"
+            [disabled]="!searchQuery().trim()"
+          />
+        </div>
+      </div>
+
+      <!-- Results Count -->
+      @if (total() > 0) {
+        <p class="text-gray-600 dark:text-gray-400 mb-4">Found {{ total() }} cards</p>
+      }
+
+      <!-- Cards Grid -->
+      @if (cards().length > 0) {
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 mb-8">
+          @for (card of cards(); track card.id) {
+            <app-card-list-item [card]="card" />
+          }
+        </div>
+
+        <!-- Load More Button -->
+        @if (hasMore()) {
+          <div class="flex justify-center">
+            <p-button
+              label="Load More"
+              icon="pi pi-plus"
+              (onClick)="loadMore()"
+              [loading]="loading()"
+              styleClass="p-button-outlined"
+            />
+          </div>
+        }
+      }
+
+      <!-- Empty State -->
+      @if (!loading() && cards().length === 0 && searchQuery().trim()) {
+        <div class="text-center py-12">
+          <p class="text-xl text-gray-500 dark:text-gray-400">No cards found. Try a different search.</p>
+        </div>
       }
     </div>
   </div>

@@ -1,5 +1,5 @@
 <div class="bg-white dark:bg-gray-800 shadow-md border-b border-gray-200 dark:border-gray-700">
-  <div class="max-w-[115rem] mx-auto w-full px-4 sm:px-6 lg:px-8">
+  <div class="max-w-[80%] mx-auto w-full px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between items-center h-16">
       <!-- Logo/Brand -->
       <div class="flex-shrink-0">
@@ -21,7 +21,7 @@
           <p-avatar
             [label]="getUserInitial()"
             shape="circle"
-            styleClass="bg-gradient-to-br from-pink-400 to-pink-600 dark:from-pink-500 dark:to-pink-700 text-white font-semibold"
+            class="bg-gradient-to-br from-pink-400 to-pink-600 dark:from-pink-500 dark:to-pink-700 text-white font-semibold"
           />
           <p-button
             label="Logout"
@@ -37,7 +37,7 @@
         <p-avatar
           [label]="getUserInitial()"
           shape="circle"
-          styleClass="bg-gradient-to-br from-pink-400 to-pink-600 dark:from-pink-500 dark:to-pink-700 text-white font-semibold"
+          class="bg-gradient-to-br from-pink-400 to-pink-600 dark:from-pink-500 dark:to-pink-700 text-white font-semibold"
         />
         <p-button
           [icon]="isMenuOpen() ? 'pi pi-times' : 'pi pi-bars'"
