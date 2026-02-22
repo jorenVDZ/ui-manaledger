@@ -44,4 +44,4 @@ __screenshots__/
 Thumbs.db
 
 # Environment files (only ignore local dev environment)
-/src/environments/environment.local.ts
+.env
