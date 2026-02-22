@@ -12,12 +12,13 @@ const envFile = `export const environment = {
     SUPABASE_ANON_KEY: '${process.env.SUPABASE_ANON_KEY}',
 };
 `;
-const targetPath = path.join(__dirname, 'src', 'environments', 'environment.development.ts');
-fs.writeFile(targetPath, envFile, (err) => {
-    if (err) {
-        console.error(err);
-        throw err;
-    } else {
-        console.log(successColor, `${checkSign} Successfully generated environment.development.ts`);
-    }
-});
+
+// Generate environment.ts (used by production builds)
+const prodPath = path.join(__dirname, 'src', 'environments', 'environment.ts');
+fs.writeFileSync(prodPath, envFile);
+console.log(successColor, `${checkSign} Successfully generated environment.ts`);
+
+// Also generate environment.development.ts (used by development builds)
+const devPath = path.join(__dirname, 'src', 'environments', 'environment.development.ts');
+fs.writeFileSync(devPath, envFile);
+console.log(successColor, `${checkSign} Successfully generated environment.development.ts`);

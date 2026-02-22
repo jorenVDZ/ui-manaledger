@@ -45,4 +45,5 @@ Thumbs.db
 
 # Environment files (only ignore local dev environment)
 .env
+/src/environments/environment.ts
 /src/environments/environment.development.ts
