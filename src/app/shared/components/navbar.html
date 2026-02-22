@@ -1,0 +1,77 @@
+<div class="bg-white dark:bg-gray-800 shadow-md border-b border-gray-200 dark:border-gray-700">
+  <div class="max-w-[115rem] mx-auto w-full px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <!-- Logo/Brand -->
+      <div class="flex-shrink-0">
+        <h1 class="text-2xl font-bold bg-gradient-to-r from-pink-400 to-pink-600 dark:from-pink-400 dark:to-pink-500 bg-clip-text text-transparent">ManaLedger</h1>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center space-x-4">
+        <p-button
+          label="Home"
+          icon="pi pi-home"
+          [text]="true"
+          severity="secondary"
+          routerLink="/home"
+        />
+
+        <!-- User Avatar & Logout -->
+        <div class="flex items-center space-x-3 ml-4 pl-4 border-l border-gray-300 dark:border-gray-600">
+          <p-avatar
+            [label]="getUserInitial()"
+            shape="circle"
+            styleClass="bg-gradient-to-br from-pink-400 to-pink-600 dark:from-pink-500 dark:to-pink-700 text-white font-semibold"
+          />
+          <p-button
+            label="Logout"
+            icon="pi pi-sign-out"
+            severity="danger"
+            (onClick)="onLogout()"
+          />
+        </div>
+      </div>
+
+      <!-- Mobile menu button -->
+      <div class="md:hidden flex items-center space-x-3">
+        <p-avatar
+          [label]="getUserInitial()"
+          shape="circle"
+          styleClass="bg-gradient-to-br from-pink-400 to-pink-600 dark:from-pink-500 dark:to-pink-700 text-white font-semibold"
+        />
+        <p-button
+          [icon]="isMenuOpen() ? 'pi pi-times' : 'pi pi-bars'"
+          [text]="true"
+          [rounded]="true"
+          severity="secondary"
+          (onClick)="toggleMenu()"
+          [attr.aria-expanded]="isMenuOpen()"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Mobile menu -->
+@if (isMenuOpen()) {
+  <div class="md:hidden border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+    <div class="px-4 py-2 space-y-2">
+      <p-button
+        label="Home"
+        icon="pi pi-home"
+        [text]="true"
+        severity="secondary"
+        styleClass="w-full justify-start mb-2"
+        routerLink="/home"
+        (onClick)="toggleMenu()"
+      />
+      <p-button
+        label="Logout"
+        icon="pi pi-sign-out"
+        severity="danger"
+        (onClick)="onLogout()"
+        styleClass="w-full"
+      />
+    </div>
+  </div>
+}
