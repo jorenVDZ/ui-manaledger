@@ -12,8 +12,8 @@ export class AuthService {
   constructor() {
     // Initialize Supabase client with environment variables
     this.supabase = createClient(
-      environment.supabase.url,
-      environment.supabase.anonKey
+      environment.SUPABASE_URL,
+      environment.SUPABASE_ANON_KEY
     );
 
     // Listen for auth state changes

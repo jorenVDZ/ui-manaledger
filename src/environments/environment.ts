@@ -1,7 +1,6 @@
 export const environment = {
-  production: false,
-  supabase: {
-    url: 'YOUR_SUPABASE_URL',
-    anonKey: 'YOUR_SUPABASE_ANON_KEY'
-  }
+  production: true,
+  SUPABASE_URL: '',
+  SUPABASE_SECRET_KEY: '',
+  SUPABASE_ANON_KEY: ''
 };
