@@ -4,13 +4,22 @@
       #cardElement
       class="card-wrapper"
       [class.focused]="isFocused(i)">
-      <div class="card-image-container">
+      <div class="card-image-container relative">
         <img
-          [src]="card.imageUris?.normal || card.imageUris?.large || card.imageUris?.small"
+          [src]="getCardImage(card)"
           [alt]="card.name"
           class="card-image"
           loading="lazy"
         />
+        @if (hasFaces(card)) {
+          <button
+            (click)="flipCard(card, $event)"
+            class="absolute top-3 right-3 w-12 h-12 bg-white hover:bg-gray-100 text-purple-600 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center z-10 border-2 border-purple-500"
+            aria-label="Flip card"
+          >
+            <i class="pi pi-refresh text-xl font-bold"></i>
+          </button>
+        }
       </div>
     </div>
   }

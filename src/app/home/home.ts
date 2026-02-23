@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, HostListener, inject, signal } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { Button } from 'primeng/button';
@@ -30,6 +30,7 @@ export class HomeComponent {
   hasMore = signal(false);
   total = signal(0);
   hasSearched = signal(false);
+  showScrollTop = signal(false);
   private limit = 20;
   private offset = 0;
 
@@ -114,5 +115,15 @@ export class HomeComponent {
     if (this.hasMore() && !this.loadingMore()) {
       this.loadMore();
     }
+  }
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    // Show button when scrolled down more than 300px
+    this.showScrollTop.set(window.scrollY > 300);
+  }
+
+  scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }

@@ -6,6 +6,15 @@ query searchCards($query: String!, $limit: Int, $offset: Int) {
       imageUris {
         small
         normal
+        large
+      }
+      cardFaces {
+        name
+        imageUris {
+          small
+          normal
+          large
+        }
       }
       cmc
       artist

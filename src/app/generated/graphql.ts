@@ -389,7 +389,18 @@ export type SearchCardsQuery = {
         __typename?: 'ImageUris';
         small?: string | null;
         normal?: string | null;
+        large?: string | null;
       } | null;
+      cardFaces?: Array<{
+        __typename?: 'CardFace';
+        name: string;
+        imageUris?: {
+          __typename?: 'ImageUris';
+          small?: string | null;
+          normal?: string | null;
+          large?: string | null;
+        } | null;
+      }> | null;
       cardmarketPrice?: {
         __typename?: 'CardmarketPrice';
         avg?: number | null;
@@ -418,6 +429,15 @@ export const SearchCardsDocument = gql`
         imageUris {
           small
           normal
+          large
+        }
+        cardFaces {
+          name
+          imageUris {
+            small
+            normal
+            large
+          }
         }
         cmc
         artist

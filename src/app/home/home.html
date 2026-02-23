@@ -1,20 +1,19 @@
-<div class="min-h-screen">
+<div>
   <div class="max-w-full md:max-w-[90%] lg:max-w-[80%] mx-auto px-2 sm:px-6 lg:px-8 py-4 sm:py-12">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-purple-500/10 p-4 sm:p-8 md:p-12">
+    <!-- Header and Search Bar -->
+    <div class="mb-6">
       <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-4 bg-gradient-to-r from-pink-500 to-purple-600 dark:from-pink-400 dark:to-purple-500 bg-clip-text text-transparent">Card Search</h1>
-      <!-- Search Bar -->
-      <div class="mb-8">
-        <input
-          pInputText
-          type="text"
-          [(ngModel)]="searchQuery"
-          placeholder="Search for cards (min. 3 characters)..."
-          class="w-full p-3 text-lg"
-        />
-      </div>
+      <input
+        pInputText
+        type="text"
+        [(ngModel)]="searchQuery"
+        placeholder="Search for cards (min. 3 characters)..."
+        class="w-full p-3 text-lg"
+      />
+    </div>
 
-      <!-- Loading Spinner -->
-      @if (loading()) {
+    <!-- Loading Spinner -->
+    @if (loading()) {
         <div class="flex justify-center py-12">
           <p-progressSpinner class="w-16 h-16" />
         </div>
@@ -31,13 +30,14 @@
             <app-mobile-card-list
               [cards]="cards()"
               [loading]="loadingMore()"
+              [hasMore]="hasMore()"
               (loadMore)="onMobileLoadMore()"
             />
           </div>
 
           <!-- Desktop View: Grid Layout -->
           <div class="hidden sm:block">
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 mb-8">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-8">
               @for (card of cards(); track card.id) {
                 <app-card-list-item [card]="card" />
               }
@@ -65,6 +65,16 @@
           </div>
         }
       }
-    </div>
   </div>
+
+  <!-- Scroll to Top Button -->
+  @if (showScrollTop()) {
+    <button
+      (click)="scrollToTop()"
+      class="fixed bottom-8 right-8 w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center z-50"
+      aria-label="Scroll to top"
+    >
+      <i class="pi pi-arrow-up text-xl"></i>
+    </button>
+  }
 </div>
