@@ -1,23 +1,23 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
 import { Button } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
-import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
+import { ProgressSpinner } from 'primeng/progressspinner';
+import { debounceTime, distinctUntilChanged, of, switchMap } from 'rxjs';
 import { Card, SearchCardsGQL } from '../generated/graphql';
 import { AuthService } from '../services/auth.service';
 import { CardListItem } from './components/card-list-item/card-list-item';
+import { MobileCardList } from './components/mobile-card-list/mobile-card-list';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, FormsModule, CardListItem, InputText, Button],
+  imports: [CommonModule, FormsModule, CardListItem, MobileCardList, InputText, Button, ProgressSpinner],
   templateUrl: './home.html',
   standalone: true
 })
 export class HomeComponent {
-  private readonly _router = inject(Router);
   private readonly _authService = inject(AuthService);
   private readonly _searchCards = inject(SearchCardsGQL);
 
@@ -26,65 +26,67 @@ export class HomeComponent {
   searchQuery = signal('');
   cards = signal<Card[]>([]);
   loading = signal(false);
+  loadingMore = signal(false);
   hasMore = signal(false);
   total = signal(0);
+  hasSearched = signal(false);
   private limit = 20;
   private offset = 0;
 
   constructor() {
-    effect(() => {
-      if (!this._authService.currentUser()) {
-        this._router.navigate(['/login']);
-      }
-    });
-
     // Auto-search with debounce
     toObservable(this.searchQuery)
       .pipe(
-        debounceTime(500),
+        debounceTime(200),
         distinctUntilChanged(),
-        filter(query => query.trim().length > 0),
+        switchMap((query) => {
+          const trimmedQuery = query.trim();
+
+          if (trimmedQuery.length < 3) {
+            this.cards.set([]);
+            this.hasMore.set(false);
+            this.total.set(0);
+            this.hasSearched.set(false);
+            this.loading.set(false);
+            return of(null);
+          }
+
+          this.offset = 0;
+          this.loading.set(true);
+
+          return this._searchCards.fetch({
+            variables: {
+              query: trimmedQuery,
+              limit: this.limit,
+              offset: this.offset
+            }
+          });
+        }),
         takeUntilDestroyed()
       )
-      .subscribe(() => {
-        this.onSearch();
-      });
-  }
-
-  onSearch() {
-    const query = this.searchQuery().trim();
-    if (!query) return;
-
-    this.offset = 0;
-    this.loading.set(true);
-
-    this._searchCards.fetch({
-      variables: {
-        query,
-        limit: this.limit,
-        offset: this.offset
-      }
-    }).subscribe({
-      next: (result) => {
-        if (result.data) {
-          this.cards.set(result.data.searchCards.cards as Card[]);
-          this.hasMore.set(result.data.searchCards.hasMore);
-          this.total.set(result.data.searchCards.total);
+      .subscribe({
+        next: (result) => {
+          if (result?.data) {
+            this.cards.set(result.data.searchCards.cards as Card[]);
+            this.hasMore.set(result.data.searchCards.hasMore);
+            this.total.set(result.data.searchCards.total);
+            this.hasSearched.set(true);
+          }
+          this.loading.set(false);
+        },
+        error: () => {
+          this.hasSearched.set(true);
+          this.loading.set(false);
         }
-        this.loading.set(false);
-      },
-      error: () => {
-        this.loading.set(false);
-      }
-    });
+      });
   }
 
   loadMore() {
     const query = this.searchQuery().trim();
-    if (!query || this.loading()) return;
+    if (query.length < 3 || this.loadingMore()) return;
 
     this.offset += this.limit;
-    this.loading.set(true);
+    this.loadingMore.set(true);
 
     this._searchCards.fetch({
       variables: {
@@ -99,11 +101,18 @@ export class HomeComponent {
           this.hasMore.set(result.data.searchCards.hasMore);
           this.total.set(result.data.searchCards.total);
         }
-        this.loading.set(false);
+        this.loadingMore.set(false);
       },
       error: () => {
-        this.loading.set(false);
+        this.loadingMore.set(false);
       }
     });
+  }
+
+  onMobileLoadMore() {
+    // Only load more if there are more cards and not currently loading
+    if (this.hasMore() && !this.loadingMore()) {
+      this.loadMore();
+    }
   }
 }
