@@ -8,7 +8,6 @@ import { NavbarComponent } from './shared/components/navbar';
   selector: 'app-root',
   imports: [RouterOutlet, CommonModule, NavbarComponent],
   templateUrl: './app.html',
-  styleUrl: './app.css'
 })
 export class App {
   protected readonly title = signal('ui-manaledger');

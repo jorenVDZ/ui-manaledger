@@ -7,8 +7,8 @@
     "build": "node generate-env.js && ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "codegen": "graphql-codegen --config codegen.ts",
-    "codegen:watch": "graphql-codegen --config codegen.ts --watch"
+    "generate": "graphql-codegen --config codegen.ts",
+    "generate:watch": "graphql-codegen --config codegen.ts --watch"
   },
   "prettier": {
     "printWidth": 100,

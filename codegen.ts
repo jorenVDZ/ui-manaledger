@@ -1,7 +1,8 @@
 import type { CodegenConfig } from '@graphql-codegen/cli';
 
 const config: CodegenConfig = {
-  schema: 'https://api-manaledger.vercel.app/graphql',
+  // schema: 'https://api-manaledger.vercel.app/graphql',
+  schema: 'http://localhost:3000/graphql',
   documents: ['src/**/*.graphql', '!src/app/generated/**'],
   generates: {
     'src/app/generated/graphql.ts': {

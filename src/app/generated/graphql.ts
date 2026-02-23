@@ -47,7 +47,7 @@ export type Card = {
   /** Price data from CardMarket (if available) */
   cardmarketPrice?: Maybe<CardmarketPrice>;
   /** Converted mana cost / Mana value */
-  cmc: Scalars['Float']['output'];
+  cmc?: Maybe<Scalars['Float']['output']>;
   /** Collector number */
   collectorNumber: Scalars['String']['output'];
   /** Color identity */
@@ -382,9 +382,6 @@ export type SearchCardsQuery = {
       __typename?: 'Card';
       id: string;
       name: string;
-      cmc: number;
-      artist?: string | null;
-      isCommanderLegal: boolean;
       imageUris?: {
         __typename?: 'ImageUris';
         small?: string | null;
@@ -401,21 +398,6 @@ export type SearchCardsQuery = {
           large?: string | null;
         } | null;
       }> | null;
-      cardmarketPrice?: {
-        __typename?: 'CardmarketPrice';
-        avg?: number | null;
-        low?: number | null;
-        avg1?: number | null;
-        avg7?: number | null;
-        avg30?: number | null;
-        trend?: number | null;
-        avgFoil?: number | null;
-        lowFoil?: number | null;
-        avg1Foil?: number | null;
-        avg7Foil?: number | null;
-        avg30Foil?: number | null;
-        trendFoil?: number | null;
-      } | null;
     }>;
   };
 };
@@ -438,23 +420,6 @@ export const SearchCardsDocument = gql`
             normal
             large
           }
-        }
-        cmc
-        artist
-        isCommanderLegal
-        cardmarketPrice {
-          avg
-          low
-          avg1
-          avg7
-          avg30
-          trend
-          avgFoil
-          lowFoil
-          avg1Foil
-          avg7Foil
-          avg30Foil
-          trendFoil
         }
       }
       total

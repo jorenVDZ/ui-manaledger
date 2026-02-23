@@ -10,7 +10,6 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   imports: [CommonModule, RouterLink, ButtonModule, AvatarModule],
   templateUrl: './navbar.html',
-  styleUrl: './navbar.css'
 })
 export class NavbarComponent {
   private router = inject(Router);
