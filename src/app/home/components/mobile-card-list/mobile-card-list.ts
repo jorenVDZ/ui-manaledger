@@ -143,7 +143,7 @@ export class MobileCardList {
   }
 
   hasFaces(card: Card): boolean {
-    return !!card.cardFaces && card.cardFaces.length > 1;
+    return !!card.faces && card.faces.length > 1;
   }
 
   getCurrentFaceIndex(card: Card): number {
@@ -152,18 +152,18 @@ export class MobileCardList {
 
   flipCard(card: Card, event: Event) {
     event.stopPropagation();
-    if (card.cardFaces && card.cardFaces.length > 0) {
+    if (card.faces && card.faces.length > 0) {
       const currentIndex = this.getCurrentFaceIndex(card);
-      const nextIndex = (currentIndex + 1) % card.cardFaces.length;
+      const nextIndex = (currentIndex + 1) % card.faces.length;
       this.cardFaceIndices.set(card.id, nextIndex);
     }
   }
 
   getCardImage(card: Card): string | undefined {
     // For multi-faced cards, use the selected face
-    if (card.cardFaces && card.cardFaces.length > 0) {
-      const faceIndex = Math.min(this.getCurrentFaceIndex(card), card.cardFaces.length - 1);
-      const face = card.cardFaces[faceIndex];
+    if (card.faces && card.faces.length > 0) {
+      const faceIndex = Math.min(this.getCurrentFaceIndex(card), card.faces.length - 1);
+      const face = card.faces[faceIndex];
       if (face.imageUris) {
         return face.imageUris.normal || face.imageUris.large || face.imageUris.small || undefined;
       }

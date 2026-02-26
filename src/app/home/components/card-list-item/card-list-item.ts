@@ -13,7 +13,7 @@ export class CardListItem {
 
   hasFaces = computed(() => {
     const cardData = this.card();
-    return cardData?.cardFaces && cardData.cardFaces.length > 1;
+    return cardData?.faces && cardData.faces.length > 1;
   });
 
   cardImage = computed(() => {
@@ -21,9 +21,9 @@ export class CardListItem {
     if (!cardData) return undefined;
 
     // For multi-faced cards, use the selected face
-    if (cardData.cardFaces && cardData.cardFaces.length > 0) {
-      const faceIndex = Math.min(this.currentFaceIndex(), cardData.cardFaces.length - 1);
-      const face = cardData.cardFaces[faceIndex];
+    if (cardData.faces && cardData.faces.length > 0) {
+      const faceIndex = Math.min(this.currentFaceIndex(), cardData.faces.length - 1);
+      const face = cardData.faces[faceIndex];
       if (face.imageUris) {
         return face.imageUris.large || face.imageUris.normal || face.imageUris.small || undefined;
       }
@@ -39,8 +39,8 @@ export class CardListItem {
 
   flipCard() {
     const cardData = this.card();
-    if (cardData?.cardFaces && cardData.cardFaces.length > 0) {
-      const facesLength = cardData.cardFaces.length;
+    if (cardData?.faces && cardData.faces.length > 0) {
+      const facesLength = cardData.faces.length;
       this.currentFaceIndex.update(index => (index + 1) % facesLength);
     }
   }

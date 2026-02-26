@@ -23,8 +23,8 @@ export const graphqlProvider: ApplicationConfig['providers'] = [
 
     return {
       link: authLink.concat(httpLink.create({
-        uri: 'https://api-manaledger.vercel.app/graphql',
-        // uri: 'http://localhost:3000/graphql',
+        // uri: 'https://api-manaledger.vercel.app/graphql',
+        uri: 'http://localhost:3000/graphql',
       })),
       cache: new InMemoryCache(),
       defaultOptions: {
