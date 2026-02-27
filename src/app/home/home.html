@@ -6,7 +6,8 @@
       <input
         pInputText
         type="text"
-        [(ngModel)]="searchQuery"
+        [ngModel]="searchQuery()"
+        (ngModelChange)="searchQuery.set($event)"
         placeholder="Search for cards (min. 3 characters)..."
         class="w-full p-3 text-lg"
       />
