@@ -215,6 +215,46 @@ export type WantsListItemPatch = {
   specificPrinting?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
+export type GetCardByIdQueryVariables = Exact<{
+  scryfallId: Scalars['ID']['input'];
+}>;
+
+export type GetCardByIdQuery = {
+  __typename?: 'Query';
+  card: {
+    __typename?: 'Card';
+    id: string;
+    name: string;
+    isLegalInCommander?: boolean | null;
+    edhrecRank?: number | null;
+    edhrecUri?: string | null;
+    finishes?: Array<string> | null;
+    scryfallUri?: string | null;
+    releasedAt?: string | null;
+    price?: {
+      __typename?: 'CardmarketPrice';
+      avg?: number | null;
+      avg1?: number | null;
+      avg7?: number | null;
+      avg30?: number | null;
+      avgFoil?: number | null;
+      avg1Foil?: number | null;
+      avg7Foil?: number | null;
+      avg30Foil?: number | null;
+      low?: number | null;
+      lowFoil?: number | null;
+      trend?: number | null;
+      trendFoil?: number | null;
+    } | null;
+    imageUris?: { __typename?: 'ImageUris'; large?: string | null } | null;
+    faces?: Array<{
+      __typename?: 'CardFace';
+      name: string;
+      imageUris?: { __typename?: 'ImageUris'; large?: string | null } | null;
+    }> | null;
+  };
+};
+
 export type SearchCardsQueryVariables = Exact<{
   query: Scalars['String']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -241,6 +281,54 @@ export type SearchCardsQuery = {
   };
 };
 
+export const GetCardByIdDocument = gql`
+  query getCardById($scryfallId: ID!) {
+    card(scryfallId: $scryfallId) {
+      id
+      name
+      isLegalInCommander
+      edhrecRank
+      edhrecUri
+      finishes
+      price {
+        avg
+        avg1
+        avg7
+        avg30
+        avgFoil
+        avg1Foil
+        avg7Foil
+        avg30Foil
+        low
+        lowFoil
+        trend
+        trendFoil
+      }
+      scryfallUri
+      releasedAt
+      imageUris {
+        large
+      }
+      faces {
+        name
+        imageUris {
+          large
+        }
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class GetCardByIdGQL extends Apollo.Query<GetCardByIdQuery, GetCardByIdQueryVariables> {
+  override document = GetCardByIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const SearchCardsDocument = gql`
   query searchCards($query: String!, $limit: Int, $offset: Int) {
     searchCards(query: $query, limit: $limit, offset: $offset) {

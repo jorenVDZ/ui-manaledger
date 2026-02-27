@@ -32,7 +32,7 @@ export class HomeComponent {
   total = signal(0);
   hasSearched = signal(false);
   showScrollTop = signal(false);
-  selectedCard = signal<Card | null>(null);
+  selectedCardId = signal<string | null>(null);
   detailVisible = signal(false);
   private limit = 20;
   private offset = 0;
@@ -86,13 +86,13 @@ export class HomeComponent {
   }
 
   openDetail(card: Card) {
-    this.selectedCard.set(card);
+    this.selectedCardId.set(card.id);
     this.detailVisible.set(true);
   }
 
   closeDetail() {
     this.detailVisible.set(false);
-    this.selectedCard.set(null);
+    this.selectedCardId.set(null);
   }
 
   loadMore() {

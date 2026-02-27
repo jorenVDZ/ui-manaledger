@@ -1,20 +1,30 @@
+import { CommonModule } from '@angular/common';
 import { Component, computed, input, output, signal } from '@angular/core';
 import { Tooltip } from 'primeng/tooltip';
 import { Card } from './../../../generated/graphql';
 
 @Component({
   selector: 'app-card-list-item',
-  imports: [Tooltip],
+  standalone: true,
+  imports: [CommonModule, Tooltip],
   templateUrl: './card-list-item.html',
+  styleUrls: ['./card-list-item.css'],
 })
 export class CardListItem {
   card = input<Card>();
   openCard = output<Card>();
   currentFaceIndex = signal(0);
+  // when false, tooltip and hover-zoom are disabled
+  showTooltip = input<boolean>(true);
 
   hasFaces = computed(() => {
     const cardData = this.card();
-    return cardData?.faces && cardData.faces.length > 1;
+    // Only consider multi-faced if there are multiple faces and at least one face has image data
+    return (
+      !!cardData?.faces &&
+      cardData.faces.length > 1 &&
+      cardData.faces.some((f) => !!(f.imageUris))
+    );
   });
 
   cardImage = computed(() => {
@@ -43,6 +53,13 @@ export class CardListItem {
     if (cardData?.faces && cardData.faces.length > 0) {
       const facesLength = cardData.faces.length;
       this.currentFaceIndex.update(index => (index + 1) % facesLength);
+    }
+  }
+
+  open() {
+    const cardData = this.card();
+    if (cardData) {
+      this.openCard.emit(cardData);
     }
   }
 }

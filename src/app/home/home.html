@@ -24,8 +24,6 @@
           <!-- Mobile skeletons -->
           <div class="sm:hidden space-y-4 px-2">
             <p-skeleton width="100%" height="14rem" class="rounded-lg"></p-skeleton>
-            <p-skeleton width="100%" height="14rem" class="rounded-lg"></p-skeleton>
-            <p-skeleton width="100%" height="14rem" class="rounded-lg"></p-skeleton>
           </div>
 
           <!-- Desktop skeleton grid -->
@@ -66,14 +64,23 @@
               }
             </div>
 
+            @if (loadingMore()) {
+              <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-8">
+                <p-skeleton width="100%" height="23.5rem" class="rounded-lg"></p-skeleton>
+                <p-skeleton width="100%" height="23.5rem" class="rounded-lg"></p-skeleton>
+                <p-skeleton width="100%" height="23.5rem" class="rounded-lg"></p-skeleton>
+                <p-skeleton width="100%" height="23.5rem" class="rounded-lg"></p-skeleton>
+                <p-skeleton width="100%" height="23.5rem" class="rounded-lg"></p-skeleton>
+              </div>
+            }
+
             <!-- Load More Button (Desktop only) -->
-            @if (hasMore()) {
+            @if (hasMore() && !loadingMore()) {
               <div class="flex justify-center">
                 <p-button
                   label="Load More"
                   icon="pi pi-plus"
                   (onClick)="loadMore()"
-                  [loading]="loadingMore()"
                   styleClass="p-button-outlined"
                 />
               </div>
@@ -90,8 +97,8 @@
       }
   </div>
 
-  @if (selectedCard(); as selectedCard) {
-    <app-card-detail [cardId]="selectedCard.id" [visible]="detailVisible()" (hide)="closeDetail()"></app-card-detail>
+  @if (selectedCardId(); as selectedCardId) {
+    <app-card-detail [cardId]="selectedCardId" [visible]="detailVisible()" (hide)="closeDetail()"></app-card-detail>
   }
 
   <!-- Scroll to Top Button -->

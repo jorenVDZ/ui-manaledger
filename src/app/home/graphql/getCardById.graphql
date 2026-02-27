@@ -1,0 +1,35 @@
+query getCardById($scryfallId: ID!) {
+  card(scryfallId: $scryfallId) {
+    id
+    name
+    isLegalInCommander
+    edhrecRank
+    edhrecUri
+    finishes
+    price {
+      avg
+      avg1
+      avg7
+      avg30
+      avgFoil
+      avg1Foil
+      avg7Foil
+      avg30Foil
+      low
+      lowFoil
+      trend
+      trendFoil
+    }
+    scryfallUri
+    releasedAt
+    imageUris {
+      large
+    }
+    faces {
+      name
+      imageUris {
+        large
+      }
+    }
+  }
+}

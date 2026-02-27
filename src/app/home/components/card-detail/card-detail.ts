@@ -1,17 +1,39 @@
-import { CommonModule } from '@angular/common';
-import { Component, input, output } from '@angular/core';
-import { Dialog } from 'primeng/dialog';
+import { AsyncPipe, CommonModule } from '@angular/common';
+import { Component, inject, input, output, signal } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { DialogModule } from 'primeng/dialog';
+import { SkeletonModule } from 'primeng/skeleton';
+import { map, switchMap } from 'rxjs';
+import { Card, GetCardByIdGQL } from '../../../generated/graphql';
+import { CardListItem } from '../card-list-item/card-list-item';
 
 @Component({
   selector: 'app-card-detail',
   standalone: true,
-  imports: [CommonModule, Dialog],
+  imports: [CommonModule, DialogModule, AsyncPipe, CardListItem, SkeletonModule],
   templateUrl: './card-detail.html',
+  styleUrls: ['./card-detail.css'],
 })
 export class CardDetail {
+  private readonly _getCardById = inject(GetCardByIdGQL);
+
   cardId = input.required<string>();
   visible = input<boolean>(false);
   hide = output<void>();
+
+  // keep the raw result observable so we can expose loading state
+  private readonly result$ = toObservable(this.cardId).pipe(
+    switchMap((id) => this._getCardById.watch({ variables: { scryfallId: id } }).valueChanges)
+  );
+
+  card$ = this.result$.pipe(map((result) => result?.data?.card as Card));
+
+  loading$ = this.result$.pipe(map((result) => !!result?.loading));
+
+  // track which face is shown for multi-face cards
+  selectedFaceIndex = signal(0);
+
+  // selectedFaceIndex used by the template to highlight thumbnails
 
   close() {
     this.hide.emit();
