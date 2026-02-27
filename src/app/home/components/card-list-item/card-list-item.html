@@ -3,9 +3,10 @@
     <img
       [src]="cardImage()"
       [alt]="cardData.name"
+      (click)="openCard.emit(cardData)"
       [pTooltip]="cardData.name"
       tooltipPosition="top"
-      class="rounded-lg shadow-md hover:shadow-xl cursor-pointer"
+      class="rounded-lg cursor-pointer"
     />
     @if (hasFaces()) {
       <button

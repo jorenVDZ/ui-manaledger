@@ -4,16 +4,17 @@ import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { Button } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
-import { ProgressSpinner } from 'primeng/progressspinner';
+import { SkeletonModule } from 'primeng/skeleton';
 import { debounceTime, distinctUntilChanged, of, switchMap } from 'rxjs';
 import { Card, SearchCardsGQL } from '../generated/graphql';
 import { AuthService } from '../services/auth.service';
+import { CardDetail } from './components/card-detail/card-detail';
 import { CardListItem } from './components/card-list-item/card-list-item';
 import { MobileCardList } from './components/mobile-card-list/mobile-card-list';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, FormsModule, CardListItem, MobileCardList, InputText, Button, ProgressSpinner],
+  imports: [CommonModule, FormsModule, CardListItem, MobileCardList, CardDetail, InputText, Button, SkeletonModule],
   templateUrl: './home.html',
   standalone: true
 })
@@ -31,6 +32,8 @@ export class HomeComponent {
   total = signal(0);
   hasSearched = signal(false);
   showScrollTop = signal(false);
+  selectedCard = signal<Card | null>(null);
+  detailVisible = signal(false);
   private limit = 20;
   private offset = 0;
 
@@ -80,6 +83,16 @@ export class HomeComponent {
           this.loading.set(false);
         }
       });
+  }
+
+  openDetail(card: Card) {
+    this.selectedCard.set(card);
+    this.detailVisible.set(true);
+  }
+
+  closeDetail() {
+    this.detailVisible.set(false);
+    this.selectedCard.set(null);
   }
 
   loadMore() {

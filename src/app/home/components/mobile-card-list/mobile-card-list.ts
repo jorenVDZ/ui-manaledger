@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, effect, ElementRef, HostListener, input, output, QueryList, ViewChildren } from '@angular/core';
+import { SkeletonModule } from 'primeng/skeleton';
 import { Card } from '../../../generated/graphql';
 
 @Component({
   selector: 'app-mobile-card-list',
-  imports: [CommonModule],
+  imports: [CommonModule, SkeletonModule],
   templateUrl: './mobile-card-list.html',
   styleUrls: ['./mobile-card-list.css'],
   standalone: true
@@ -14,6 +15,7 @@ export class MobileCardList {
   loading = input<boolean>(false);
   hasMore = input<boolean>(true);
   loadMore = output<void>();
+  openCard = output<Card>();
   focusedIndex: number = 0;
   cardFaceIndices: Map<string, number> = new Map();
 

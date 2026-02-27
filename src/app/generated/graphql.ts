@@ -115,9 +115,53 @@ export type ImageUris = {
   small?: Maybe<Scalars['String']['output']>;
 };
 
+export type Mutation = {
+  __typename?: 'Mutation';
+  addWantsListItem: WantsList;
+  createWantsList: WantsList;
+  deleteWantsList: Scalars['Boolean']['output'];
+  removeWantsListItem: WantsList;
+  updateWantsList: WantsList;
+  updateWantsListItem: WantsList;
+};
+
+export type MutationAddWantsListItemArgs = {
+  item: WantsListItemInput;
+  wantsListId: Scalars['ID']['input'];
+};
+
+export type MutationCreateWantsListArgs = {
+  items?: InputMaybe<Array<WantsListItemInput>>;
+  name: Scalars['String']['input'];
+};
+
+export type MutationDeleteWantsListArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type MutationRemoveWantsListItemArgs = {
+  scryfallId: Scalars['ID']['input'];
+  wantsListId: Scalars['ID']['input'];
+};
+
+export type MutationUpdateWantsListArgs = {
+  id: Scalars['ID']['input'];
+  items?: InputMaybe<Array<WantsListItemInput>>;
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type MutationUpdateWantsListItemArgs = {
+  patch: WantsListItemPatch;
+  scryfallId: Scalars['ID']['input'];
+  wantsListId: Scalars['ID']['input'];
+};
+
 export type Query = {
   __typename?: 'Query';
   card: Card;
+  cardPrintings: Array<Card>;
+  getMyWantsLists: Array<WantsList>;
+  getWantsListById?: Maybe<WantsList>;
   searchCards: CardsConnection;
 };
 
@@ -125,10 +169,50 @@ export type QueryCardArgs = {
   scryfallId: Scalars['ID']['input'];
 };
 
+export type QueryCardPrintingsArgs = {
+  scryfallId: Scalars['ID']['input'];
+};
+
+export type QueryGetWantsListByIdArgs = {
+  id: Scalars['ID']['input'];
+};
+
 export type QuerySearchCardsArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   query: Scalars['String']['input'];
+};
+
+export type WantsList = {
+  __typename?: 'WantsList';
+  createdAt?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  items: Array<WantsListItem>;
+  name: Scalars['String']['output'];
+  updatedAt?: Maybe<Scalars['String']['output']>;
+  userId: Scalars['ID']['output'];
+};
+
+export type WantsListItem = {
+  __typename?: 'WantsListItem';
+  amount: Scalars['Int']['output'];
+  foil: Scalars['Boolean']['output'];
+  printingScryfallId?: Maybe<Scalars['ID']['output']>;
+  scryfallId: Scalars['ID']['output'];
+  specificPrinting?: Maybe<Scalars['Boolean']['output']>;
+};
+
+export type WantsListItemInput = {
+  amount?: InputMaybe<Scalars['Int']['input']>;
+  foil?: InputMaybe<Scalars['Boolean']['input']>;
+  scryfallId: Scalars['ID']['input'];
+  specificPrinting?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type WantsListItemPatch = {
+  amount?: InputMaybe<Scalars['Int']['input']>;
+  foil?: InputMaybe<Scalars['Boolean']['input']>;
+  specificPrinting?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type SearchCardsQueryVariables = Exact<{
@@ -147,39 +231,12 @@ export type SearchCardsQuery = {
       __typename?: 'Card';
       id: string;
       name: string;
-      imageUris?: {
-        __typename?: 'ImageUris';
-        small?: string | null;
-        normal?: string | null;
-        large?: string | null;
-      } | null;
+      imageUris?: { __typename?: 'ImageUris'; large?: string | null } | null;
       faces?: Array<{
         __typename?: 'CardFace';
         name: string;
-        imageUris?: {
-          __typename?: 'ImageUris';
-          small?: string | null;
-          normal?: string | null;
-          large?: string | null;
-        } | null;
+        imageUris?: { __typename?: 'ImageUris'; large?: string | null } | null;
       }> | null;
-      price?: {
-        __typename?: 'CardmarketPrice';
-        avg?: number | null;
-        low?: number | null;
-        avg1?: number | null;
-        avg7?: number | null;
-        avg30?: number | null;
-        trend?: number | null;
-        avgFoil?: number | null;
-        lowFoil?: number | null;
-        avg1Foil?: number | null;
-        avg7Foil?: number | null;
-        avg30Foil?: number | null;
-        trendFoil?: number | null;
-        idProduct?: number | null;
-        idCategory?: number | null;
-      } | null;
     }>;
   };
 };
@@ -191,33 +248,13 @@ export const SearchCardsDocument = gql`
         id
         name
         imageUris {
-          small
-          normal
           large
         }
         faces {
           name
           imageUris {
-            small
-            normal
             large
           }
-        }
-        price {
-          avg
-          low
-          avg1
-          avg7
-          avg30
-          trend
-          avgFoil
-          lowFoil
-          avg1Foil
-          avg7Foil
-          avg30Foil
-          trendFoil
-          idProduct
-          idCategory
         }
       }
       total

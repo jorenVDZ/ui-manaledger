@@ -1,4 +1,4 @@
-import { Component, computed, input, signal } from '@angular/core';
+import { Component, computed, input, output, signal } from '@angular/core';
 import { Tooltip } from 'primeng/tooltip';
 import { Card } from './../../../generated/graphql';
 
@@ -9,6 +9,7 @@ import { Card } from './../../../generated/graphql';
 })
 export class CardListItem {
   card = input<Card>();
+  openCard = output<Card>();
   currentFaceIndex = signal(0);
 
   hasFaces = computed(() => {
@@ -25,13 +26,13 @@ export class CardListItem {
       const faceIndex = Math.min(this.currentFaceIndex(), cardData.faces.length - 1);
       const face = cardData.faces[faceIndex];
       if (face.imageUris) {
-        return face.imageUris.large || face.imageUris.normal || face.imageUris.small || undefined;
+        return face.imageUris.large;
       }
     }
 
     // For single-faced cards, use the main imageUris
     if (cardData.imageUris) {
-      return cardData.imageUris.large || cardData.imageUris.normal || cardData.imageUris.small || undefined;
+      return cardData.imageUris.large;
     }
 
     return undefined;
