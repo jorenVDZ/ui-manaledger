@@ -7,7 +7,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { PasswordModule } from 'primeng/password';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
   selector: 'app-login',
@@ -20,10 +20,10 @@ import { AuthService } from '../services/auth.service';
     FloatLabelModule,
     MessageModule
   ],
-  templateUrl: './login.html',
+  templateUrl: './login-page.html',
   standalone: true
 })
-export class LoginComponent {
+export class LoginPage {
   private router = inject(Router);
   private authService = inject(AuthService);
 

@@ -3,7 +3,7 @@ import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../../services/auth-service';
 
 @Component({
   selector: 'app-navbar',
@@ -11,7 +11,7 @@ import { AuthService } from '../../services/auth.service';
   imports: [CommonModule, RouterLink, ButtonModule, AvatarModule],
   templateUrl: './navbar.html',
 })
-export class NavbarComponent {
+export class Navbar {
   private router = inject(Router);
   protected authService = inject(AuthService);
 

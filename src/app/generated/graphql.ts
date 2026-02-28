@@ -55,6 +55,12 @@ export type Card = {
   typeLine: Scalars['String']['output'];
 };
 
+export type CardEdge = {
+  __typename?: 'CardEdge';
+  cursor: Scalars['String']['output'];
+  node: Card;
+};
+
 /** Card face for multi-faced cards */
 export type CardFace = {
   __typename?: 'CardFace';
@@ -99,8 +105,8 @@ export type CardmarketPrice = {
 /** Paginated cards response */
 export type CardsConnection = {
   __typename?: 'CardsConnection';
-  cards: Array<Card>;
-  hasMore: Scalars['Boolean']['output'];
+  edges: Array<CardEdge>;
+  pageInfo: PageInfo;
   total: Scalars['Int']['output'];
 };
 
@@ -156,6 +162,14 @@ export type MutationUpdateWantsListItemArgs = {
   wantsListId: Scalars['ID']['input'];
 };
 
+export type PageInfo = {
+  __typename?: 'PageInfo';
+  endCursor: Scalars['String']['output'];
+  hasNextPage: Scalars['Boolean']['output'];
+  hasPreviousPage: Scalars['Boolean']['output'];
+  startCursor: Scalars['String']['output'];
+};
+
 export type Query = {
   __typename?: 'Query';
   card: Card;
@@ -178,8 +192,8 @@ export type QueryGetWantsListByIdArgs = {
 };
 
 export type QuerySearchCardsArgs = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
   query: Scalars['String']['input'];
 };
 
@@ -257,8 +271,8 @@ export type GetCardByIdQuery = {
 
 export type SearchCardsQueryVariables = Exact<{
   query: Scalars['String']['input'];
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  after?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 export type SearchCardsQuery = {
@@ -266,18 +280,28 @@ export type SearchCardsQuery = {
   searchCards: {
     __typename?: 'CardsConnection';
     total: number;
-    hasMore: boolean;
-    cards: Array<{
-      __typename?: 'Card';
-      id: string;
-      name: string;
-      imageUris?: { __typename?: 'ImageUris'; large?: string | null } | null;
-      faces?: Array<{
-        __typename?: 'CardFace';
+    edges: Array<{
+      __typename?: 'CardEdge';
+      cursor: string;
+      node: {
+        __typename?: 'Card';
+        id: string;
         name: string;
         imageUris?: { __typename?: 'ImageUris'; large?: string | null } | null;
-      }> | null;
+        faces?: Array<{
+          __typename?: 'CardFace';
+          name: string;
+          imageUris?: { __typename?: 'ImageUris'; large?: string | null } | null;
+        }> | null;
+      };
     }>;
+    pageInfo: {
+      __typename?: 'PageInfo';
+      hasPreviousPage: boolean;
+      hasNextPage: boolean;
+      startCursor: string;
+      endCursor: string;
+    };
   };
 };
 
@@ -330,23 +354,31 @@ export class GetCardByIdGQL extends Apollo.Query<GetCardByIdQuery, GetCardByIdQu
   }
 }
 export const SearchCardsDocument = gql`
-  query searchCards($query: String!, $limit: Int, $offset: Int) {
-    searchCards(query: $query, limit: $limit, offset: $offset) {
-      cards {
-        id
-        name
-        imageUris {
-          large
-        }
-        faces {
+  query searchCards($query: String!, $first: Int, $after: String) {
+    searchCards(query: $query, first: $first, after: $after) {
+      edges {
+        cursor
+        node {
+          id
           name
           imageUris {
             large
           }
+          faces {
+            name
+            imageUris {
+              large
+            }
+          }
         }
       }
+      pageInfo {
+        hasPreviousPage
+        hasNextPage
+        startCursor
+        endCursor
+      }
       total
-      hasMore
     }
   }
 `;

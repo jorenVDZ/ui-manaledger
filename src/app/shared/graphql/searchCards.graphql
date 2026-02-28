@@ -1,0 +1,27 @@
+query searchCards($query: String!, $first: Int, $after: String) {
+  searchCards(query: $query, first: $first, after: $after) {
+    edges {
+      cursor
+      node {
+        id
+        name
+        imageUris {
+          large
+        }
+        faces {
+          name
+          imageUris {
+            large
+          }
+        }
+      }
+    }
+    pageInfo {
+      hasPreviousPage
+      hasNextPage
+      startCursor
+      endCursor
+    }
+    total
+  }
+}

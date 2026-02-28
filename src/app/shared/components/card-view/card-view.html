@@ -1,0 +1,19 @@
+<div class="relative" [class.zoom-on-hover]="showTooltip()">
+  <img
+    [src]="cardImage()"
+    [alt]="card().name"
+    [pTooltip]="showTooltip() ? card().name : undefined"
+    tooltipPosition="top"
+    class="rounded-xl"
+    [class.cursor-pointer]="showTooltip()"
+    [class.cursor-default]="!showTooltip()"
+  />
+  @if (hasFaces()) {
+    <p-button
+      icon="pi pi-refresh"
+      [rounded]="true"
+      severity="secondary"
+      class="absolute top-2 right-2 w-9 h-9 z-10"
+      (onClick)="flipCard()" />
+  }
+</div>

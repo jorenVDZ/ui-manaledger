@@ -1,0 +1,13 @@
+/* Zoom effect applied only when the class is present (bound when showTooltip() is true) */
+.zoom-on-hover {
+	transition: transform 150ms ease-in-out;
+	will-change: transform;
+}
+.zoom-on-hover:hover {
+	transform: scale(1.05);
+}
+
+/* Optional: slightly lift the image on hover for a more tactile feel */
+.zoom-on-hover:hover {
+	box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}

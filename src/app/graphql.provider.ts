@@ -2,9 +2,10 @@ import { provideHttpClient } from '@angular/common/http';
 import { ApplicationConfig, inject } from '@angular/core';
 import { InMemoryCache } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
+import { relayStylePagination } from '@apollo/client/utilities';
 import { provideApollo } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
-import { AuthService } from './services/auth.service';
+import { AuthService } from './services/auth-service';
 
 export const graphqlProvider: ApplicationConfig['providers'] = [
   provideHttpClient(),
@@ -26,7 +27,15 @@ export const graphqlProvider: ApplicationConfig['providers'] = [
         uri: 'https://api-manaledger.vercel.app/graphql',
         // uri: 'http://localhost:3000/graphql',
       })),
-      cache: new InMemoryCache(),
+      cache: new InMemoryCache({
+        typePolicies: {
+          Query: {
+            fields: {
+              searchCards: relayStylePagination(['query']),
+            },
+          },
+        },
+      }),
       defaultOptions: {
         watchQuery: {
           fetchPolicy: 'cache-and-network',

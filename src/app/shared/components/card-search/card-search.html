@@ -1,0 +1,35 @@
+<div>
+  <form [formGroup]="searchForm" class="w-full mb-4">
+    <input type="text" formControlName="searchTerm" placeholder="Search" pInputText fluid (keydown.enter)="onEnter($event)" />
+  </form>
+  <p class="mb-4">
+    @if (initialLoading()) {
+      <p-skeleton width="6.5rem" class="rounded-lg" />
+    } @else {
+      Found {{ total() }} cards
+    }
+  </p>
+  <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+    @if (initialLoading()) {
+      <div class="block md:hidden col-span-1">
+        <p-skeleton width="100%" height="26.125rem" class="rounded-lg" />
+      </div>
+      @for (_ of [0,1,2,3,4]; track _) {
+        <div class="hidden md:block">
+          <p-skeleton width="100%" height="23.5rem" class="rounded-lg" />
+        </div>
+      }
+    } @else {
+      @for(card of cards$ | async; track card.id) {
+        <app-card-view [card]="card" />
+      } @empty {
+        <p class="col-span-5 text-center text-gray-500">No cards found.</p>
+      }
+    }
+  </div>
+  @if (hasMore()) {
+    <div class="col-span-5 text-center mt-4">
+      <p-button label="Load More" icon="pi pi-refresh" [loading]="loadingMoreCards()" (onClick)="fetchMore()" />
+    </div>
+  }
+</div>
